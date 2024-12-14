@@ -30,7 +30,7 @@ export const login = async (
     }
 
     // Find user
-    const user = users.find((u) => u.email === email);
+    const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({ message: "Invalid email or password" });
       return;
@@ -51,121 +51,121 @@ export const login = async (
   }
 };
 
-// Controller function to register a user
-export const register = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await User.create(req.body);
-    res.status(201).json(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'An error occurred' });
-  }
-};
 
+
+
+// // Register Controller
 // export const register = async (req: Request, res: Response): Promise<void> => {
+//     try {
+//       const { email, password } = req.body;
   
-   
-//     UserModel.create(req.body)
-//     .then((user)=>res.json(user))
-//     .catch((err)=>console.error(err)
-//     )
+//       // Validate input
+//       if (!email || !password) {
+//         res.status(400).json({ message: "Email and password are required" });
+//         return;
+//       }
   
-    
-// };
+//       // Check if user already exists
+//       const existingUser = users.find((u) => u.email === email);
+//       if (existingUser) {
+//         res.status(400).json({ message: "User already exists" });
+//         return;
+//       }
+  
+//       // Hash password
+//       const hashedPassword = await bcrypt.hash(password, 10);
+  
+//       // Create new user
+//       const newUser = {
+//         id: users.length + 1, // Auto-increment ID
+//         email,
+//         password: hashedPassword,
+//       };
+  
+//       // Add user to the database (mock here)
+//       users.push(newUser);
+     
+  
+//       // Generate token
+//       const token = generateToken({ id: newUser.id, email: newUser.email });
+  
+//       // Respond with the created user and token
+//       res.status(201).json({
+//         message: "User created successfully",
+//         user: { id: newUser.id, email: newUser.email },
+//         token,
+//       });
+//     } catch (error) {
+//       res.status(500).json({ message: "Internal server error", error });
+//     }
+//   };
 
 
-// export const register = async (req: Request, res: Response): Promise<void> => { 
+
+
+
+
+
+
+  
+// // Controller function to register a user
+// export const register = async (req: Request, res: Response): Promise<void> => {
 //   try {
-//     const { email, password } = req.body;
-
-//     // Validate input
-//     if (!email || !password) {
-//       res.status(400).json({ message: "Email and password are required" });
-//       return;
-//     }
-
-//     // Check if user already exists in the database
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       res.status(400).json({ message: "User already exists" });
-//       return;
-//     }
-
-//     // Create new user instance after checking if the user exists
-//     const newUser = new User({
-//       email,
-//       password, // Password will be hashed automatically due to the pre-save hook in the User model
-//     });
-//     console.log("new user is", newUser);
-//     UserModel.create(newUser).then(user=>res.json(user))
-//     .catch(err=>console.log(err)
-//     )
-
-//     // // Save user to MongoDB
-//     // await newUser.save();
-
-//     // Generate token
-//     const token = generateToken({ id: newUser.id.toString(), email: newUser.email });
-
-//     // Respond with the created user and token
-//     res.status(201).json({
-//       message: "User created successfully",
-//       user: { id: newUser.id, email: newUser.email },
-//       token,
-//     });
-//   } catch (error) {
-//     console.error("Error in register function:", error);
-//     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-//     res.status(500).json({ message: "Internal server error", error: errorMessage });
+//     const user = await User.create(req.body);
+//     res.status(201).json(user);
+//     await user.save();
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'An error occurred' });
 //   }
 // };
 
 
-/*
 
-// Register Controller
-export const register = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { email, password } = req.body;
-  
-      // Validate input
-      if (!email || !password) {
-        res.status(400).json({ message: "Email and password are required" });
-        return;
-      }
-  
-      // Check if user already exists
-      const existingUser = users.find((u) => u.email === email);
-      if (existingUser) {
-        res.status(400).json({ message: "User already exists" });
-        return;
-      }
-  
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Create new user
-      const newUser = {
-        id: users.length + 1, // Auto-increment ID
-        email,
-        password: hashedPassword,
-      };
-  
-      // Add user to the database (mock here)
-      users.push(newUser);
-     
-  
-      // Generate token
-      const token = generateToken({ id: newUser.id, email: newUser.email });
-  
-      // Respond with the created user and token
-      res.status(201).json({
-        message: "User created successfully",
-        user: { id: newUser.id, email: newUser.email },
-        token,
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Internal server error", error });
+
+export const register = async (req: Request, res: Response): Promise<void> => { 
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      res.status(400).json({ message: "Email and password are required" });
+      return;
     }
-  };
-*/
+
+    // Check if user already exists in the database
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      res.status(400).json({ message: "User already exists" });
+      return;
+    }
+
+    // Create new user instance after checking if the user exists
+    // const newUser = new User({
+    //   email,
+    //   password, // Password will be hashed automatically due to the pre-save hook in the User model
+    // });
+    
+  
+
+    const newUser = await User.create({ email, password });
+    console.log("new user is", newUser);
+
+    // // Save user to MongoDB
+    // await newUser.save();
+
+    // Generate token
+    const token = generateToken({ id: newUser.id.toString(), email: newUser.email });
+
+    // Respond with the created user and token
+    res.status(201).json({
+      message: "User created successfully",
+      user: { id: newUser.id, email: newUser.email },
+      token,
+    });
+  } catch (error) {
+    console.error("Error in register function:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({ message: "Internal server error", error: errorMessage });
+  }
+};
