@@ -113,3 +113,147 @@ export const deleteTask = async (req: Request, res: Response, next: NextFunction
     next(error);
   }
 };
+
+// // Helper function to calculate time in hours
+// const convertToHours = (ms: number) => Math.max(ms / 3600000, 0);
+// export const getDashboard=(req: Request, res: Response, next: NextFunction)  => {
+//   try {
+//       const currentTime = new Date();
+      
+//       const tasks = req.body.tasks; // tasks  data should be passed as an array in the body
+
+//       if (!tasks || tasks.length === 0) {
+//         return res.status(400).json({ error: 'No task data provided' });
+//       }
+
+//       // 1. Total count of tasks
+//       const totalTasks = tasks.length;
+
+//       // 2. Percentage of completed and pending tasks
+//       const completedTasks = tasks.filter((task: any) => task.status === 'finished').length;
+//       const pendingTasks = totalTasks - completedTasks;
+//       const completedPercentage = (completedTasks / totalTasks) * 100;
+//       const pendingPercentage = (pendingTasks / totalTasks) * 100;
+
+//       // 3. Time lapsed and estimated time for pending tasks by priority
+//       interface PriorityStats {
+//         [key: number]: { lapsed: number; left: number };
+//       }
+//       let priorityStats: PriorityStats = {};
+//       tasks.forEach((task: any) => {
+//           const { startTime, endTime, status, priority } = task;
+//           const start = new Date(startTime);
+//           const end = new Date(endTime);
+
+//           if (status === 'pending') {
+//               const timeLapsed = convertToHours(currentTime.getTime() - start.getTime()); // Time lapsed in hours
+//               const timeLeft = convertToHours(end.getTime() - currentTime.getTime()); // Time left in hours
+
+//               if (!priorityStats[priority]) {
+//                   priorityStats[priority] = { lapsed: 0, left: 0 };
+//               }
+//               priorityStats[priority].lapsed += timeLapsed;
+//               priorityStats[priority].left += timeLeft;
+//           }
+//       });
+
+//       // 4. Average time for completed tasks
+//       const completedTimes = tasks.filter((task: any) => task.status === 'finished').map((task: any) => {
+//           const start = new Date(task.startTime);
+//           const end = new Date(task.endTime);
+//           return convertToHours(end.getTime() - start.getTime()); // Time taken for task completion
+//       });
+//       const averageCompletionTime = completedTimes.length > 0 ? completedTimes.reduce((a: number, b: number) => a + b) / completedTimes.length : 0;
+
+//       // Respond with the statistics
+//       res.status(200).json({
+//         message: 'Dashboard data retrieved successfully',
+//         data: {
+//           totalTasks,
+//           completedPercentage,
+//           pendingPercentage,
+//           priorityStats,
+//           averageCompletionTime,
+//         },
+//       });
+    
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// Helper function to calculate time in hours
+const convertToHours = (ms: number) => Math.max(ms / 3600000, 0);
+
+// Express Route Handler - Ensure it's async and properly typed
+export const getDashboard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const currentTime = new Date();
+
+    // Assuming task data is passed in the request body as an array
+    const tasks = req.body.tasks; // tasks data should be passed as an array in the body
+
+    if (!tasks || tasks.length === 0) {
+      res.status(400).json({ error: 'No task data provided' });
+      return;
+    }
+
+    // 1. Total count of tasks
+    const totalTasks = tasks.length;
+
+    // 2. Percentage of completed and pending tasks
+    const completedTasks = tasks.filter((task: any) => task.status === 'finished').length;
+    const pendingTasks = totalTasks - completedTasks;
+    const completedPercentage = (completedTasks / totalTasks) * 100;
+    const pendingPercentage = (pendingTasks / totalTasks) * 100;
+
+    // 3. Time lapsed and estimated time for pending tasks by priority
+    interface PriorityStats {
+      [key: number]: { lapsed: number; left: number };
+    }
+    let priorityStats: PriorityStats = {};
+
+    tasks.forEach((task: any) => {
+      const { startTime, endTime, status, priority } = task;
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+
+      if (status === 'pending') {
+        const timeLapsed = convertToHours(currentTime.getTime() - start.getTime()); // Time lapsed in hours
+        const timeLeft = convertToHours(end.getTime() - currentTime.getTime()); // Time left in hours
+
+        if (!priorityStats[priority]) {
+          priorityStats[priority] = { lapsed: 0, left: 0 };
+        }
+        priorityStats[priority].lapsed += timeLapsed;
+        priorityStats[priority].left += timeLeft;
+      }
+    });
+
+    // 4. Average time for completed tasks
+    const completedTimes = tasks
+      .filter((task: any) => task.status === 'finished')
+      .map((task: any) => {
+        const start = new Date(task.startTime);
+        const end = new Date(task.endTime);
+        return convertToHours(end.getTime() - start.getTime()); // Time taken for task completion
+      });
+
+    const averageCompletionTime =
+      completedTimes.length > 0 ? completedTimes.reduce((a: number, b: number) => a + b) / completedTimes.length : 0;
+
+    // Respond with the statistics
+    res.status(200).json({
+      message: 'Dashboard data retrieved successfully',
+      data: {
+        totalTasks,
+        completedPercentage,
+        pendingPercentage,
+        priorityStats,
+        averageCompletionTime,
+      },
+    });
+  } catch (error) {
+    next(error); // Pass the error to the global error handler
+  }
+};

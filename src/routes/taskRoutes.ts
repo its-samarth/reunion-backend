@@ -10,5 +10,6 @@ router.post('/tasks', authenticate, taskController.createTask);
 router.get('/tasks', authenticate, taskController.getTasks);
 router.put('/tasks/:taskId', authenticate, taskController.updateTask);
 router.delete('/tasks/:taskId', authenticate, taskController.deleteTask);
+router.post('/dashboard',authenticate,taskController.getDashboard)
 
 export default router;
