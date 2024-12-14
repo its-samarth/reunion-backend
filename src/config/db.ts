@@ -18,9 +18,9 @@ const connectDB = async (): Promise<void> => {
   });
 
   try {
-    // Connect the client to the server
+    // Connect the client to the  server
     await client.connect();
-    console.log("uri is up ");  // This should print  URI or undefined
+    console.log("uri is up ");  // This should print URI or undefined
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

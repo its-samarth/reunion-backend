@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
     "start": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no  test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
