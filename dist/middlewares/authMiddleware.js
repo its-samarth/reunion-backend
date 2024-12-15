@@ -13,8 +13,14 @@ const authenticate = (req, res, next) => {
         return;
     }
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.id; // Attach userId to the request object
+        // Decode the token
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET); // 'id' instead of 'userId'
+        // Attach 'id' to 'userId' in the request
+        const authReq = req;
+        authReq.userId = decoded.id;
+        console.log("Decoded Token:", decoded);
+        console.log("User ID attached to request:", authReq.userId);
+        console.log("Type of userId in request:", typeof authReq.userId);
         next();
     }
     catch (error) {

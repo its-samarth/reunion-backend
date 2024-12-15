@@ -45,4 +45,5 @@ router.post('/tasks', authMiddleware_1.authenticate, taskController.createTask);
 router.get('/tasks', authMiddleware_1.authenticate, taskController.getTasks);
 router.put('/tasks/:taskId', authMiddleware_1.authenticate, taskController.updateTask);
 router.delete('/tasks/:taskId', authMiddleware_1.authenticate, taskController.deleteTask);
+router.post('/dashboard', authMiddleware_1.authenticate, taskController.getDashboard);
 exports.default = router;
