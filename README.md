@@ -77,17 +77,29 @@ https://reunion-backend-ibh5.onrender.com/api
   ```  
 - **Response**:  
   ```json
-  [
+  {
+  "tasks": [
     {
-      "id": "task1",
-      "title": "Task Title",
-      "description": "Task Description",
-      "status": "pending"
-    }
+      "_id": "675e07427dc247aa3f6e218e",
+      "title": "bdfbd",
+      "priority": 4,
+      "status": "Pending",
+      "startTime": "2024-12-14T01:31:00.000Z",
+      "endTime": "2024-12-12T01:31:00.000Z",
+      "totalTime": 528,
+      "userId": "675d8c8bda49f20b7b93f569",
+      "createdAt": "2024-12-14T22:31:30.162Z",
+      "updatedAt": "2024-12-14T23:21:07.481Z",
+      "__v": 0
+    },
+    
+    // Additional tasks can be included in the array
   ]
-  ```  
+}
 
-#### Create a Task  
+  
+
+ #### Create a Task  
 - **Endpoint**: `POST /tasks`  
 - **Description**: Creates a new task.  
 - **Headers**:  
@@ -99,18 +111,33 @@ https://reunion-backend-ibh5.onrender.com/api
 - **Request Body**:  
   ```json
   {
-    "title": "New Task",
-    "description": "Task Description"
-  }
+  "title": "1st emailt",
+  "priority": 3,
+  "status": "pending",
+  "startTime": "2024-12-15T08:00:00.000Z",
+  "endTime": "2024-12-15T12:00:00.000Z"
+}
+
   ```  
 - **Response**:  
   ```json
   {
-    "id": "newTaskId",
-    "title": "New Task",
-    "description": "Task Description",
-    "status": "pending"
+  "message": "Task created",
+  "task": {
+    "title": "1st emailt",
+    "priority": 3,
+    "status": "pending",
+    "startTime": "2024-12-15T08:00:00.000Z",
+    "endTime": "2024-12-15T12:00:00.000Z",
+    "totalTime": 4,
+    "userId": "675d8c8bda49f20b7b93f569",
+    "_id": "675e1b09263573dd516232f0",
+    "createdAt": "2024-12-14T23:55:53.271Z",
+    "updatedAt": "2024-12-14T23:55:53.271Z",
+    "__v": 0
   }
+}
+
   ```  
 
 #### Update a Task  
@@ -124,12 +151,14 @@ https://reunion-backend-ibh5.onrender.com/api
   ```  
 - **Request Body**:  
   ```json
-  {
-    "title": "Updated Task Title",
-    "description": "Updated Task Description",
-    "status": "completed"
-  }
-  ```  
+   {
+  "title": "1st emailt",
+  "priority": 3,
+  "status": "pending",
+  "startTime": "2024-12-15T08:00:00.000Z",
+  "endTime": "2024-12-15T12:00:00.000Z"
+}
+  
 - **Response**:  
   ```json
   {
@@ -171,14 +200,25 @@ https://reunion-backend-ibh5.onrender.com/api
   ```  
 - **Request Body**:  
   ```json
-  {
-    "tasks": [
-      {
-        "status": "completed",
-        "category": "work"
-      }
-    ]
-  }
+   {
+  "tasks": [
+    {
+      "_id": "675e07427dc247aa3f6e218e",
+      "title": "bdfbd",
+      "priority": 4,
+      "status": "Pending",
+      "startTime": "2024-12-14T01:31:00.000Z",
+      "endTime": "2024-12-12T01:31:00.000Z",
+      "totalTime": 528,
+      "userId": "675d8c8bda49f20b7b93f569",
+      "createdAt": "2024-12-14T22:31:30.162Z",
+      "updatedAt": "2024-12-14T23:21:07.481Z",
+      "__v": 0
+    },
+    
+    // Additional tasks can be included in the array
+  ]
+}
   ```  
 - **Response**:  
   ```json
